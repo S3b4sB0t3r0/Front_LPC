@@ -4,10 +4,12 @@ import '../styles/Reservas.css';
 
 function Reservas() {
   const navigate = useNavigate();
-  const storedUser = JSON.parse(localStorage.getItem('user'));
-  const nombre = storedUser ? storedUser.nombre : '';
-  const email = storedUser ? storedUser.correo : '';
 
+  // Asegurarse de que los datos del usuario estén disponibles en el localStorage
+  const storedUser = JSON.parse(localStorage.getItem('user')) || {}; 
+  const { nombre, correo: email } = storedUser;
+
+  // Estados de los formularios
   const [fecha, setFecha] = useState('');
   const [hora, setHora] = useState('');
   const [teatro, setTeatro] = useState('');
@@ -18,15 +20,29 @@ function Reservas() {
   const [mensaje, setMensaje] = useState('');
   const [tipoMensaje, setTipoMensaje] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  // Validación de la fecha de la reserva
+  const validarFecha = () => {
     const now = new Date();
     const fechaSeleccionada = new Date(`${fecha}T${hora}`);
     const diferenciaDias = (fechaSeleccionada - now) / (1000 * 60 * 60 * 24);
+    return diferenciaDias >= 2;  // Asegura que la reserva se haga al menos 2 días antes
+  };
 
-    // Validar fecha futura y con al menos 2 días de anticipación
-    if (diferenciaDias < 2) {
+  // Función para mostrar las notificaciones
+  const mostrarNotificacion = (mensaje, tipo) => {
+    setMensaje(mensaje);
+    setTipoMensaje(tipo);
+    setTimeout(() => {
+      setMensaje('');
+      setTipoMensaje('');
+    }, 5000);
+  };
+
+  // Función para enviar el formulario
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validarFecha()) {
       mostrarNotificacion('La reserva debe realizarse al menos con 2 días de anticipación.', 'error');
       return;
     }
@@ -55,10 +71,9 @@ function Reservas() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Error en la reserva');
+        throw new Error(errorData.message || 'Error al realizar la reserva');
       }
 
-      const data = await response.json();
       mostrarNotificacion('Reserva realizada con éxito!', 'success');
 
       setTimeout(() => {
@@ -69,16 +84,6 @@ function Reservas() {
       mostrarNotificacion('Hubo un error al realizar la reserva. Intenta nuevamente.', 'error');
     }
   };
-
-  const mostrarNotificacion = (mensaje, tipo) => {
-    setMensaje(mensaje);
-    setTipoMensaje(tipo);
-    setTimeout(() => {
-      setMensaje('');
-      setTipoMensaje('');
-    }, 5000);
-  };
-
 
   return (
     <div className="reservas-page" id="reservas-page">
@@ -97,25 +102,25 @@ function Reservas() {
         <h1 className="reservas-title" id="reservas-title">Reservar</h1>
         <div className="reservas-form-container" id="reservas-form-container">
           <form className="reservas-form" id="reservas-form" onSubmit={handleSubmit}>
+            {/* Nombre y Email */}
             <div className="reservas-row">
               <div className="reservas-col">
                 <label htmlFor="input-nombre" className="reservas-label">Nombre Completo</label>
                 <input 
                   type="text" 
                   id="input-nombre" 
-                  value={nombre} 
+                  value={nombre || ''} 
                   readOnly 
                   className="reservas-input" 
                   required 
                 />
               </div>
-              
               <div className="reservas-col">
                 <label htmlFor="input-email" className="reservas-label">Correo Electrónico</label>
                 <input 
                   type="email" 
                   id="input-email" 
-                  value={email} 
+                  value={email || ''} 
                   readOnly 
                   className="reservas-input" 
                   required 
@@ -123,6 +128,7 @@ function Reservas() {
               </div>
             </div>
 
+            {/* Fecha, Hora y Duración */}
             <div className="reservas-row">
               <div className="reservas-col">
                 <label htmlFor="input-fecha" className="reservas-label">Fecha</label>
@@ -135,7 +141,6 @@ function Reservas() {
                   required 
                 />
               </div>
-              
               <div className="reservas-col">
                 <label htmlFor="input-hora" className="reservas-label">Hora</label>
                 <input 
@@ -147,7 +152,6 @@ function Reservas() {
                   required 
                 />
               </div>
-
               <div className="reservas-col">
                 <label htmlFor="input-duracion" className="reservas-label">Duración (Horas)</label>
                 <input 
@@ -157,12 +161,13 @@ function Reservas() {
                   onChange={(e) => setDuracion(e.target.value)} 
                   className="reservas-input" 
                   required 
-                  min="1"
-                  max="8"
+                  min="1" 
+                  max="8" 
                 />
               </div>
             </div>
 
+            {/* Teatro y Tipo de Evento */}
             <div className="reservas-row">
               <div className="reservas-col">
                 <label htmlFor="input-teatro" className="reservas-label">Teatro</label>
@@ -174,17 +179,12 @@ function Reservas() {
                   required
                 >
                   <option value="">Selecciona un teatro</option>
-                  <option value="Teatro Libre">Teatro Libre</option>
-                  <option value="Teatro Colon">Teatro Colon</option>
-                  <option value="Teatro Delia">Teatro Delia</option>
-                  <option value="Teatro Nacional">Teatro Nacional</option>
-                  <option value="Teatro Lozano">Teatro Lozano</option>
-                  <option value="Teatro La Candelaria">Teatro La Candelaria</option>
-                  <option value="Teatro Jorge Eliécer Gaitán">Teatro Jorge Eliécer Gaitán</option>
-                  <option value="Teatro Cafam">Teatro Cafam</option>
+                  {/* Opciones de teatro */}
+                  {['Teatro Libre', 'Teatro Colon', 'Teatro Delia', 'Teatro Nacional', 'Teatro Lozano', 'Teatro La Candelaria', 'Teatro Jorge Eliécer Gaitán', 'Teatro Cafam'].map((teatroOption) => (
+                    <option key={teatroOption} value={teatroOption}>{teatroOption}</option>
+                  ))}
                 </select>
               </div>
-
               <div className="reservas-col">
                 <label htmlFor="input-tipoEvento" className="reservas-label">Tipo de Evento</label>
                 <select 
@@ -202,6 +202,7 @@ function Reservas() {
               </div>
             </div>
 
+            {/* Especificar otro evento si es necesario */}
             {tipoEvento === 'Otro' && (
               <div className="reservas-col">
                 <label htmlFor="input-otroEvento" className="reservas-label">Especifica el Tipo de Evento</label>
@@ -216,6 +217,7 @@ function Reservas() {
               </div>
             )}
 
+            {/* URL de la imagen */}
             <div className="reservas-col">
               <label htmlFor="input-imagenUrl" className="reservas-label">URL de la Imagen</label>
               <input 
@@ -233,7 +235,7 @@ function Reservas() {
         </div>
 
         {mensaje && (
-          <div className={`reservas.notificacion ${tipoMensaje}`} id="reservas-notification">
+          <div className={`reservas-notificacion ${tipoMensaje}`}>
             {mensaje}
           </div>
         )}

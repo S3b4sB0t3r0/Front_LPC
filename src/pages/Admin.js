@@ -100,21 +100,7 @@ const cambiarPagina = (numeroPagina) => {
   setPaginaActual(numeroPagina);
 };
 
-// Filtra los datos de la sección activa y muestra solo los correspondientes a la página actual
-const datosSeccionActiva = () => {
-  let data = [];
-  if (activeSection === 'usuarios') data = usuarios;
-  else if (activeSection === 'eventos') data = eventos;
-  else if (activeSection === 'teatros') data = teatros;
-  else if (activeSection === 'contacto') data = contactos;
-  else if (activeSection === 'reservas') data = reservas;
 
-  // Calcular el índice inicial y final de los elementos a mostrar
-  const indexOfLastItem = paginaActual * itemsPorPagina;
-  const indexOfFirstItem = indexOfLastItem - itemsPorPagina;
-
-  return data.slice(indexOfFirstItem, indexOfLastItem);
-};
 
 
 // Calcula la cantidad de eventos por página y la página actual
