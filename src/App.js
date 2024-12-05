@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Inicio from './pages/Inicio';
@@ -18,32 +18,6 @@ import ProtectedAdmin from './ProtectedAdmin'; // Importa el nuevo componente
 import Admin from './pages/Admin';
 
 function App() {
-  return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Inicio />} />
-          <Route path="/servicios" element={<Servicios />} />
-          <Route path="/teatros" element={<Teatros />} />
-          <Route path="/eventos" element={<Eventos />} />
-          <Route path="/contacto" element={<Contacto />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Registro />} />
-          <Route path="/admin" element={<ProtectedAdmin><Admin /></ProtectedAdmin>} /> {/* Ruta protegida */}
-          <Route path="/mision" element={<MisionyVision />} />
-          <Route path="/restablecer" element={<Restablecer />} />
-          <Route path="/restablecer/:token" element={<RestablecerContraseña />} />
-
-          {/* Rutas protegidas */}
-          <Route path="/cuenta" element={<ProtectedRoute><Cuenta /></ProtectedRoute>} />
-          <Route path="/reservas" element={<ProtectedRoute><Reservas /></ProtectedRoute>} />
-        </Routes>
-      </Layout>
-    </Router>
-  );
-}
-
-
   useEffect(() => {
     // URL de WebSocket para conectar con el backend
     const socket = new WebSocket('wss://back-lpc.onrender.com/ws');  // Ajusta la URL a la de tu backend
@@ -70,7 +44,29 @@ function App() {
     };
   }, []);  // Se ejecuta solo al montar el componente
 
-  return <div>Conexión WebSocket activa</div>;
+  return (
+    <Router>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Inicio />} />
+          <Route path="/servicios" element={<Servicios />} />
+          <Route path="/teatros" element={<Teatros />} />
+          <Route path="/eventos" element={<Eventos />} />
+          <Route path="/contacto" element={<Contacto />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Registro />} />
+          <Route path="/admin" element={<ProtectedAdmin><Admin /></ProtectedAdmin>} /> {/* Ruta protegida */}
+          <Route path="/mision" element={<MisionyVision />} />
+          <Route path="/restablecer" element={<Restablecer />} />
+          <Route path="/restablecer/:token" element={<RestablecerContraseña />} />
 
+          {/* Rutas protegidas */}
+          <Route path="/cuenta" element={<ProtectedRoute><Cuenta /></ProtectedRoute>} />
+          <Route path="/reservas" element={<ProtectedRoute><Reservas /></ProtectedRoute>} />
+        </Routes>
+      </Layout>
+    </Router>
+  );
+}
 
 export default App;
