@@ -26,7 +26,7 @@ function Admin() {
   const [editEvento, setEditEvento] = useState(null);
   const [isEditEventModalOpen, setEditEventModalOpen] = useState(false);
 
-  const backendUrl = 'http://localhost:4000';
+  const backendUrl = 'https://back-lpc.onrender.com';
 
   useEffect(() => {
     cargarDatos();
@@ -180,7 +180,7 @@ const totalPaginas = Math.ceil(eventosFiltrados.length / itemsPorPagina);
     const nuevoEstado = !evento.estado; // Cambia el estado
   
     try {
-      const respuesta = await fetch(`http://localhost:4000/api/eventos/${id}`, {
+      const respuesta = await fetch(`https://back-lpc.onrender.com/api/eventos/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

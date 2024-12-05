@@ -14,7 +14,7 @@ function Restablecer() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:4000/restablecer', {
+      const response = await fetch('https://back-lpc.onrender.com/restablecer', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

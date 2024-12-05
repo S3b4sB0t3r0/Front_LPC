@@ -14,7 +14,7 @@ function RestablecerContraseña() {
   useEffect(() => {
     const verificarToken = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/restablecer/${token}`);
+        const response = await fetch(`https://back-lpc.onrender.com/restablecer/${token}`);
         if (!response.ok) throw new Error('Token inválido o expirado');
         setMensaje('Token válido. Puedes establecer una nueva contraseña.');
         setMensajeTipo('success');
@@ -37,7 +37,7 @@ function RestablecerContraseña() {
     }
 
     try {
-      const response = await fetch(`http://localhost:4000/restablecer/${token}`, {
+      const response = await fetch(`https://back-lpc.onrender.com/restablecer/${token}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
