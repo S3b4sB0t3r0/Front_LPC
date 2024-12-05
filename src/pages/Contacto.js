@@ -22,7 +22,7 @@ function Contacto() {
       return;
     }
 
-    fetch('http://localhost:4000/contacto', {
+    fetch('https://back-lpc.onrender.com/contacto', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

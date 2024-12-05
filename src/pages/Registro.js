@@ -29,7 +29,7 @@ function Registro() {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/Usuarios', {
+      const response = await fetch('https://back-lpc.onrender.com/Usuarios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -11,7 +11,7 @@ function Eventos() {
   useEffect(() => {
     const cargarEventos = async () => {
       try {
-        const response = await fetch('http://localhost:4000/eventos');
+        const response = await fetch('https://back-lpc.onrender.com/eventos');
         if (!response.ok) {
           throw new Error('Error al obtener los eventos');
         }

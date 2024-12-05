@@ -14,7 +14,7 @@ function Login() {
     const data = Object.fromEntries(formData);
 
     try {
-      const response = await fetch('http://localhost:4000/login', {
+      const response = await fetch('https://back-lpc.onrender.com/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

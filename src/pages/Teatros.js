@@ -13,7 +13,7 @@ function Teatros() {
     // Cargar teatros
     const cargarTeatros = async () => {
       try {
-        const response = await fetch('http://localhost:4000/teatros');
+        const response = await fetch('https://back-lpc.onrender.com/teatros');
         if (!response.ok) {
           throw new Error('Error al obtener los teatros');
         }
